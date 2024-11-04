@@ -53,3 +53,11 @@ h2 {
 .add-block {
     bottom: 20px;
 }
+
+.unvis {
+    pointer-events: none;
+}
+
+.card_delete {
+    z-index: 9990   ;
+}
