@@ -17,7 +17,8 @@ const mouseDown = (e) => {
   } else {
     newBlock = e.target.closest(".block");
     new_elem_opasity.innerHTML = actualElem.innerHTML;
-    newBlock.querySelectorAll(".card").find
+    // console.log(newBlock.querySelectorAll(".card").indexOf(actualElem))
+    actualElem.insertAdjacentElement("afterend", new_elem_opasity)
     // actualElem.insertAdjacentElement('beforebegin', new_elem_opasity)
     
     actualElemXY = [
@@ -106,15 +107,16 @@ const onMouseOver = (e) => {
   newBlock = e.target.closest(".block");
 
   if (e.target.classList.value == "card") {
+    console.log("caaaard")
     mouseUpItem = e.target;
     if (e.target.offsetHeight / 2 <= e.y - e.target.offsetTop) {
       new_elem_opasity = e.target.insertAdjacentElement(
-        "beforebegin",
+        "afterend",
         new_elem_opasity,
       );
     } else {
       new_elem_opasity = e.target.insertAdjacentElement(
-        "afterend",
+        "beforebegin",
         new_elem_opasity,
       );
     }
