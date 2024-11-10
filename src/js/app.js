@@ -10,32 +10,59 @@ new_elem_opasity.classList.add("unvis");
 
 const mouseDown = (e) => {
   e.preventDefault();
-  
-  actualElem = e.target.closest('.card');
+
+  actualElem = e.target.closest(".card");
   if (actualElem.querySelector(".card_delete") === e.target) {
-    actualElem.remove()
-  } else {newBlock = e.target.closest(".block");
-  new_elem_opasity.innerHTML = actualElem.innerHTML;
-  actualElemXY = [
-    e.clientX - actualElem.offsetLeft,
-    e.clientY - actualElem.offsetTop,
-  ];
-  newBlock.querySelector('.body--cards').append(new_elem_opasity)
-  mouseUpItem = newBlock.querySelector('.body--cards')
-  actualElem.classList.add("dragged");
-  document.documentElement.addEventListener("mouseup", onMouseUp);
-  document.documentElement.addEventListener("mousemove", onMouseOver);}
-  
-}
+    actualElem.remove();
+  } else {
+    newBlock = e.target.closest(".block");
+    new_elem_opasity.innerHTML = actualElem.innerHTML;
+    newBlock.querySelectorAll(".card").find
+    // actualElem.insertAdjacentElement('beforebegin', new_elem_opasity)
+    
+    actualElemXY = [
+      e.clientX - actualElem.offsetLeft,
+      e.clientY - actualElem.offsetTop,
+    ];
+
+
+    // if (actualElem.offsetHeight / 2 <= e.y - actualElem.offsetTop) {
+    //   new_elem_opasity = actualElem.insertAdjacentElement(
+    //     "beforebegin",
+    //     new_elem_opasity,
+    //   );
+    // } else {
+    //   new_elem_opasity = actualElem.insertAdjacentElement(
+    //     "afterend",
+    //     new_elem_opasity,
+    //   );
+    // }
+
+    // console.log(newBlock.querySelectorAll(".card")[1])
+    // newBlock.find(actualElem).insertAdjacentElement('beforeend', new_elem_opasity)
+    // newBlock.querySelector(".body--cards").append(new_elem_opasity);
+    mouseUpItem = newBlock.querySelector(".body--cards");
+    actualElem.classList.add("dragged");
+    document.documentElement.addEventListener("mouseup", onMouseUp);
+    document.documentElement.addEventListener("mousemove", onMouseOver);
+  }
+};
 
 function createNewCard(text) {
   const elem = document.createElement("div");
   elem.classList.add("card");
   const content = `<div class="card_text">${text}</div>
         <button class="card_delete">&#215;</button>`;
-
   elem.insertAdjacentHTML("beforeend", content);
-  return elem
+  const button = elem.querySelector(".card_delete")
+  button.style.opacity = 0
+  elem.addEventListener("mouseover", () => {
+    button.style.opacity = 1
+  })
+  elem.addEventListener("mouseout", () => {
+    button.style.opacity = 0
+  })
+  return elem;
 }
 
 function toogleMove(elem1, elem2) {
@@ -81,41 +108,43 @@ const onMouseOver = (e) => {
   if (e.target.classList.value == "card") {
     mouseUpItem = e.target;
     if (e.target.offsetHeight / 2 <= e.y - e.target.offsetTop) {
-      new_elem_opasity = e.target
-        .insertAdjacentElement('beforebegin', new_elem_opasity)
+      new_elem_opasity = e.target.insertAdjacentElement(
+        "beforebegin",
+        new_elem_opasity,
+      );
     } else {
-      new_elem_opasity = e.target
-        .insertAdjacentElement('afterend', new_elem_opasity)
+      new_elem_opasity = e.target.insertAdjacentElement(
+        "afterend",
+        new_elem_opasity,
+      );
     }
-    return
-    } 
+    return;
+  }
 
   if (newBlock && newBlock !== lastMouseElem) {
-    mouseUpItem = newBlock.querySelector(".body--cards")
+    mouseUpItem = newBlock.querySelector(".body--cards");
     new_elem_opasity = newBlock
       .querySelector(".body--cards")
       .appendChild(new_elem_opasity);
 
     lastMouseElem = newBlock;
   }
-
 };
 
 const onMouseUp = (e) => {
   if (mouseUpItem) {
+    const elem = createNewCard(
+      actualElem.querySelector(".card_text").textContent,
+    );
 
-    const elem = createNewCard(actualElem.querySelector('.card_text').textContent)
-    
     if (mouseUpItem.classList.value == "card") {
-
       if (mouseUpItem.offsetHeight / 2 <= e.y - mouseUpItem.offsetTop) {
-        mouseUpItem.insertAdjacentElement('afterend', elem)
+        mouseUpItem.insertAdjacentElement("afterend", elem);
       } else {
-        mouseUpItem.insertAdjacentElement('beforebegin', elem)
+        mouseUpItem.insertAdjacentElement("beforebegin", elem);
       }
-
     } else {
-      mouseUpItem.append(elem)
+      mouseUpItem.append(elem);
     }
 
     actualElem.remove();
@@ -163,8 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .querySelector(".body--cards");
       for (const value of formData[el]) {
         const elem = createNewCard(value);
-        // elem.classList.add("card");
-        // elem.textContent = value;
         place.append(elem);
       }
     });
