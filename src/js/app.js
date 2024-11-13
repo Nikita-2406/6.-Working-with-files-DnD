@@ -16,16 +16,21 @@ const mouseDown = (e) => {
     actualElem.remove();
   } else {
     newBlock = e.target.closest(".block");
+    console.log(actualElem.nextSibling);
+    mouseUpItem =
+      actualElem.nextSibling && actualElem.nextSibling.classList.value == "card"
+        ? actualElem.nextSibling
+        : newBlock.querySelector(".body--cards");
+    console.log(mouseUpItem.offsetTop);
     new_elem_opasity.innerHTML = actualElem.innerHTML;
     // console.log(newBlock.querySelectorAll(".card").indexOf(actualElem))
-    actualElem.insertAdjacentElement("afterend", new_elem_opasity)
+    actualElem.insertAdjacentElement("afterend", new_elem_opasity);
     // actualElem.insertAdjacentElement('beforebegin', new_elem_opasity)
-    
+
     actualElemXY = [
       e.clientX - actualElem.offsetLeft,
       e.clientY - actualElem.offsetTop,
     ];
-
 
     // if (actualElem.offsetHeight / 2 <= e.y - actualElem.offsetTop) {
     //   new_elem_opasity = actualElem.insertAdjacentElement(
@@ -42,7 +47,13 @@ const mouseDown = (e) => {
     // console.log(newBlock.querySelectorAll(".card")[1])
     // newBlock.find(actualElem).insertAdjacentElement('beforeend', new_elem_opasity)
     // newBlock.querySelector(".body--cards").append(new_elem_opasity);
-    mouseUpItem = newBlock.querySelector(".body--cards");
+    // if (mouseUpItem.closest(''))
+    // if (e.target.classList.value == "card") {
+    //   console.log("caaaard")
+    //   mouseUpItem = e.target;
+    // } else {
+    //   console.log("sqadopiufhq")
+    // }
     actualElem.classList.add("dragged");
     document.documentElement.addEventListener("mouseup", onMouseUp);
     document.documentElement.addEventListener("mousemove", onMouseOver);
@@ -55,14 +66,14 @@ function createNewCard(text) {
   const content = `<div class="card_text">${text}</div>
         <button class="card_delete">&#215;</button>`;
   elem.insertAdjacentHTML("beforeend", content);
-  const button = elem.querySelector(".card_delete")
-  button.style.opacity = 0
+  const button = elem.querySelector(".card_delete");
+  button.style.opacity = 0;
   elem.addEventListener("mouseover", () => {
-    button.style.opacity = 1
-  })
+    button.style.opacity = 1;
+  });
   elem.addEventListener("mouseout", () => {
-    button.style.opacity = 0
-  })
+    button.style.opacity = 0;
+  });
   return elem;
 }
 
@@ -105,21 +116,27 @@ const onMouseOver = (e) => {
   actualElem.style.left = `${e.clientX - actualElemXY[0]}px`;
   actualElem.style.top = `${e.clientY - actualElemXY[1]}px`;
   newBlock = e.target.closest(".block");
+  const mouseHoverCard = e.target.closest(".card");
+  console.log(
+    mouseUpItem.offsetHeight / 2 <= e.y - mouseUpItem.offsetTop,
+    mouseHoverCard,
+  );
 
-  if (e.target.classList.value == "card") {
-    console.log("caaaard")
-    mouseUpItem = e.target;
-    if (e.target.offsetHeight / 2 <= e.y - e.target.offsetTop) {
-      new_elem_opasity = e.target.insertAdjacentElement(
+  if (mouseHoverCard) {
+    console.log(mouseHoverCard.offsetTop);
+    console.log(mouseUpItem.offsetTop);
+    if (mouseHoverCard.offsetHeight / 2 <= e.y - mouseHoverCard.offsetTop) {
+      new_elem_opasity = mouseHoverCard.insertAdjacentElement(
         "afterend",
         new_elem_opasity,
       );
     } else {
-      new_elem_opasity = e.target.insertAdjacentElement(
+      new_elem_opasity = mouseHoverCard.insertAdjacentElement(
         "beforebegin",
         new_elem_opasity,
       );
     }
+    mouseUpItem = mouseHoverCard;
     return;
   }
 
